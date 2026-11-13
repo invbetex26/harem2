@@ -1,0 +1,9 @@
+{
+  "name": "Harem Club · Caja Puerta",
+  "short_name": "Caja Puerta",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1c0f22",
+  "theme_color": "#1c0f22",
+  "lang": "es"
+}

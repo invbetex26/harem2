@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1218">
+<title>Harem Club · Caja Puerta</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1218;--card:#161c25;--inset:#0e1218;--line2:#27303d;--tx:#e9edf3;--mut:#8b97a9;--gold:#c8a65e;--rose:#c8a65e;--ok:#4cb782;--bad:#e5645f;--r:10px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 'IBM Plex Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums}
+body{padding:env(safe-area-inset-top) 0 calc(72px + env(safe-area-inset-bottom))}
+h1,h2,.big{font-family:'IBM Plex Sans',sans-serif;margin:0;font-weight:600}
+.wrap{max-width:560px;margin:0 auto;padding:14px}
+header{display:flex;justify-content:space-between;align-items:center;padding:6px 2px 14px;border-bottom:1px solid var(--line2);margin-bottom:14px}
+header h1{font-size:20px;letter-spacing:.2px}
+header small{color:var(--mut);display:block;font-size:13px;text-transform:capitalize}
+.pill{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid var(--line2);color:var(--mut)}
+.pill.on{color:var(--ok);border-color:#4cb78266}.pill.off{color:var(--gold);border-color:#c8a65e66}
+.card{background:var(--card);border:1px solid var(--line2);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.card h2{font-size:17px}
+.total{border-left:3px solid var(--gold)}
+.total .big{font-size:40px;font-weight:600;color:var(--tx);line-height:1.1;letter-spacing:-.5px}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.mini{background:var(--inset);border:1px solid var(--line2);border-radius:8px;padding:10px 6px;text-align:center}
+.mini b{display:block;font-size:16px;font-weight:600}.mini span{font-size:12px;color:var(--mut)}
+label{display:block;font-size:13px;font-weight:500;color:var(--mut);margin:16px 0 6px}
+input,select,textarea{width:100%;padding:14px;font:inherit;color:var(--tx);background:var(--inset);border:1px solid var(--line2);border-radius:8px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;padding:14px 6px;border-radius:8px;border:1px solid var(--line2);background:var(--inset);color:var(--mut);font:500 15px 'IBM Plex Sans',sans-serif}
+.seg button.sel{background:#c8a65e1f;color:#f0e2bd;border-color:var(--gold);font-weight:600}
+.step{display:flex;align-items:center;gap:10px}
+.step button{width:56px;height:56px;border-radius:8px;border:1px solid var(--line2);background:var(--inset);color:var(--tx);font-size:26px}
+.step output{flex:1;text-align:center;font:600 34px 'IBM Plex Sans'}
+.go{width:100%;margin-top:20px;padding:17px;border:0;border-radius:8px;background:var(--gold);color:#17110a;font:600 16px 'IBM Plex Sans',sans-serif;letter-spacing:.2px}
+.go.alt{background:#e9edf3;color:#0e1218}.go.ghost{background:transparent;border:1px solid var(--line2);color:var(--tx);font-weight:500;font-size:15px;padding:14px}
+.go:disabled{opacity:.55;cursor:not-allowed}
+.mov{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line2)}
+.mov:first-child{border-top:0}
+.mov .n{font:500 14px 'IBM Plex Sans';color:var(--mut)}
+.mov b{display:block;font-weight:600}.mov small{color:var(--mut)}
+.mov .amt{font:600 16px 'IBM Plex Sans'}
+.mov.void{opacity:.5}.mov.void .amt{text-decoration:line-through}
+.tag{display:inline-block;font-size:11px;font-weight:500;padding:2px 7px;border-radius:5px;background:var(--inset);border:1px solid var(--line2);color:var(--mut);margin-right:4px}
+.tag.v{background:#e5645f22;color:var(--bad);border-color:#e5645f66}
+.x{background:none;border:1px solid var(--line2);color:var(--mut);border-radius:6px;padding:4px 10px;font-size:12px;margin-top:4px}
+nav{position:fixed;left:0;right:0;bottom:0;background:#0b0f14;border-top:1px solid var(--line2);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+nav button{flex:1;background:none;border:0;color:var(--mut);padding:8px 2px;font:500 12px 'IBM Plex Sans';border-radius:8px}
+nav button.sel{color:var(--gold)}
+nav button svg{display:block;margin:0 auto 3px}
+.hide{display:none!important}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.login .card{width:100%;max-width:380px;padding:24px}
+.login h1{font-size:28px;font-weight:600;letter-spacing:.5px}
+.login .card::before{content:"";display:block;width:36px;height:3px;background:var(--gold);margin-bottom:16px}
+.err{color:var(--bad);min-height:20px;font-size:14px;margin-top:8px}
+.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translateX(-50%);background:var(--ok);color:#04210f;font-weight:600;padding:12px 18px;border-radius:8px;z-index:9}
+.toast.bad{background:var(--bad);color:#2a0000}
+.k{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--line2)}
+.k:first-of-type{border-top:0}.k b{font-weight:600}
+.aud{font-size:14px;padding:10px 0;border-top:1px solid var(--line2)}.aud small{color:var(--mut)}
+.empty{color:var(--mut);text-align:center;padding:18px 0}
+@media (prefers-reduced-motion:no-preference){.toast{animation:in .2s ease-out}@keyframes in{from{opacity:0;transform:translate(-50%,-8px)}}}
+</style>
+</head>
+<body>
+<div id="login" class="login"><div class="card">
+  <h1>Harem Club</h1><p style="color:var(--mut);margin:4px 0 0">Caja puerta · control de entradas</p>
+  <label for="usr">Usuario</label><select id="usr"></select>
+  <label for="pin">PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="••••">
+  <div class="err" id="lerr"></div>
+  <button class="go alt" onclick="entrar()">Entrar</button>
+</div></div>
+<div id="app" class="hide"><div class="wrap">
+  <header><div><h1>Caja puerta</h1><small id="sub"></small></div><span id="net" class="pill"></span></header>
+  <section id="v-reg">
+    <div class="card total">
+      <small style="color:var(--mut)">Recaudación de la noche</small>
+      <div class="big" id="t-total">S/ 0.00</div>
+      <div id="t-info" style="color:var(--mut);margin:2px 0 12px"></div>
+      <div class="row" id="t-pay"></div>
+    </div>
+    <div class="card">
+      <h2 style="font-size:20px">Registrar entrada</h2>
+      <label>Tipo</label><div class="seg" id="g-tipo"></div>
+      <label>Cantidad de personas</label>
+      <div class="step"><button onclick="cant(-1)" aria-label="Menos">−</button><output id="cant">1</output><button onclick="cant(1)" aria-label="Más">+</button></div>
+      <label for="imp">Importe total cobrado (S/)</label>
+      <input id="imp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0.00">
+      <label>Medio de pago</label><div class="seg" id="g-pago"></div>
+      <label>Procedencia</label><div class="seg" id="g-proc"></div>
+      <label for="obs">Observación (opcional)</label>
+      <input id="obs" type="text" placeholder="Ej. amigos de Mateo" maxlength="80">
+      <button class="go" onclick="registrar()">Registrar · <span id="bol"></span></button>
+    </div>
+  </section>
+  <section id="v-mov" class="hide"><div class="card"><h2 style="font-size:20px;margin-bottom:6px">Movimientos de hoy</h2><div id="lista"></div></div></section>
+  <section id="v-cierre" class="hide">
+    <div class="card"><h2 style="font-size:20px">Cierre de caja</h2><div id="cierre"></div>
+      <button id="btnCerrar" class="go alt" onclick="cerrar()">Cerrar turno y guardar</button>
+      <button class="go ghost" onclick="csv()">Descargar Excel (CSV)</button>
+    </div>
+    <div class="card"><h2 style="font-size:18px;margin-bottom:6px">Cierres anteriores</h2><div id="cierres"></div></div>
+  </section>
+  <section id="v-aud" class="hide"><div class="card"><h2 style="font-size:20px;margin-bottom:6px">Auditoría</h2><div id="audit"></div></div><button class="go ghost" onclick="salir()">Cerrar sesión</button></section>
+</div>
+<nav>
+  <button data-v="reg" class="sel"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Registrar</button>
+  <button data-v="mov"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Movimientos</button>
+  <button data-v="cierre"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>Cierre</button>
+  <button data-v="aud"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg>Auditoría</button>
+</nav></div>
+<script>
+/* CONFIGURACIÓN */
+const CONFIG={
+  LOCAL:'Harem Club',
+  USUARIOS:[
+    {nombre:'Administrador',pin:'1234',rol:'admin',serie:'AD02'},
+    {nombre:'Seguridad 1',pin:'1111',rol:'cajero',serie:'WA02'}
+  ],
+  TIPOS:['Entrada','Taxi','Botella puerta'],
+  PAGOS:['Efectivo','Yape','Tarjeta'],
+  PROCEDENCIAS:['Casa','Taxi'],
+  SUPABASE_URL:'',
+  SUPABASE_KEY:''
+};
+
+const $=id=>document.getElementById(id);
+const S={user:null,tipo:0,pago:0,proc:0,n:1,items:[]};
+const nube=!!(CONFIG.SUPABASE_URL&&CONFIG.SUPABASE_KEY);
+const KEY='harem_caja_v1';
+const SHIFT_KEY='harem_turno_actual_v1';
+const money=n=>'S/ '+Number(n||0).toFixed(2);
+const hoy=()=>new Date().toLocaleDateString('sv-SE');
+const hora=iso=>new Date(iso).toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let turnoActual=localStorage.getItem(SHIFT_KEY)||('turno-'+Date.now().toString(36));
+localStorage.setItem(SHIFT_KEY,turnoActual);
+let cerrando=false;
+let syncEnCurso=false;
+
+/* Almacenamiento local */
+function cargarLocal(){
+  try{S.items=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){S.items=[]}
+  // IMPORTANTE: no reasignar movimientos antiguos sin turno al turno actual.
+  // Se mantienen fuera de los totales para evitar duplicarlos tras un cierre.
+}
+function guardarLocal(){
+  try{localStorage.setItem(KEY,JSON.stringify(S.items))}
+  catch(e){toast('No se pudo guardar en este dispositivo',true)}
+}
+async function api(path,opt={}){
+  const r=await fetch(CONFIG.SUPABASE_URL+'/rest/v1/'+path,{...opt,headers:{apikey:CONFIG.SUPABASE_KEY,Authorization:'Bearer '+CONFIG.SUPABASE_KEY,'Content-Type':'application/json',...(opt.headers||{})}});
+  if(!r.ok)throw new Error('Error de sincronización '+r.status);
+  return r.status===204?null:r.json();
+}
+async function subir(){
+  if(!nube)return;
+  const pend=S.items.filter(x=>x.pend);
+  if(!pend.length){setNet();return}
+  try{
+    const rows=pend.map(x=>({id:x.id,kind:x.kind,data:{...x,pend:undefined}}));
+    await api('registros',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(rows)});
+    pend.forEach(x=>delete x.pend);
+    guardarLocal();setNet(true);
+  }catch(e){setNet(false)}
+}
+async function bajar(){
+  if(!nube){setNet();return}
+  if(syncEnCurso)return;
+  syncEnCurso=true;
+  try{
+    const rows=await api('registros?select=id,data&order=id.asc&limit=10000');
+    const loc=new Map(S.items.map(x=>[x.id,x]));
+    rows.forEach(r=>{
+      const l=loc.get(r.id);
+      if(!l||(!l.pend&&(r.data.ts_mod||r.data.ts)>=(l.ts_mod||l.ts)))loc.set(r.id,r.data);
+    });
+    S.items=[...loc.values()];
+    guardarLocal();
+    await subir();
+    setNet(true);
+  }catch(e){setNet(false)}
+  finally{syncEnCurso=false}
+}
+function setNet(ok){
+  const e=$('net');if(!e)return;
+  if(!nube){e.textContent='Solo en este celular';e.className='pill off';return}
+  const p=S.items.some(x=>x.pend);
+  e.textContent=ok===false||p?'Sin conexión · pendiente':'Guardado en la nube';
+  e.className='pill '+(ok===false||p?'off':'on');
+}
+function guardar(it){
+  it.ts_mod=new Date().toISOString();
+  if(nube)it.pend=true;
+  const i=S.items.findIndex(x=>x.id===it.id);
+  if(i>=0)S.items[i]=it;else S.items.push(it);
+  guardarLocal();subir();
+}
+
+/* Auditoría */
+function audit(accion,detalle){
+  guardar({id:'a-'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),kind:'audit',ts:new Date().toISOString(),usuario:S.user.nombre,accion,detalle});
+}
+
+/* Movimientos del turno activo */
+const movs=()=>S.items.filter(x=>x.kind==='mov'&&x.turno===turnoActual).sort((a,b)=>a.ts<b.ts?-1:1);
+const validos=()=>movs().filter(m=>!m.anulado);
+function siguienteBoleta(){
+  const s=S.user.serie;
+  const nums=S.items.filter(x=>x.kind==='mov'&&x.boleta&&x.boleta.startsWith(s+'-')).map(x=>parseInt(x.boleta.split('-')[1],10)||0);
+  return s+'-'+String((nums.length?Math.max(...nums):1000)+1).padStart(6,'0');
+}
+
+/* Login */
+CONFIG.USUARIOS.forEach((u,i)=>$('usr').insertAdjacentHTML('beforeend',`<option value="${i}">${esc(u.nombre)}</option>`));
+$('pin').addEventListener('keydown',e=>{if(e.key==='Enter')entrar()});
+function entrar(){
+  const u=CONFIG.USUARIOS[$('usr').value];
+  if(u&&$('pin').value.replace(/\D/g,'')===u.pin){
+    S.user=u;try{sessionStorage.setItem('harem_u',$('usr').value)}catch(e){}
+    $('login').classList.add('hide');$('app').classList.remove('hide');$('pin').value='';
+    iniciar();audit('Inicio de sesión','');
+  }else{$('lerr').textContent='PIN incorrecto para '+(u?u.nombre:'este usuario')+'. Revisa el usuario elegido e inténtalo de nuevo.';$('pin').value=''}
+}
+function salir(){
+  audit('Cierre de sesión','');
+  try{sessionStorage.removeItem('harem_u')}catch(e){}
+  location.reload();
+}
+
+/* Interfaz */
+function seg(id,arr,key){
+  const g=$(id);
+  g.innerHTML=arr.map((t,i)=>`<button class="${S[key]===i?'sel':''}" data-i="${i}">${esc(t)}</button>`).join('');
+  g.onclick=e=>{const b=e.target.closest('button');if(!b)return;S[key]=+b.dataset.i;seg(id,arr,key)};
+}
+function cant(d){S.n=Math.max(1,Math.min(99,S.n+d));$('cant').textContent=S.n}
+function toast(m,bad){
+  const t=document.createElement('div');t.className='toast'+(bad?' bad':'');t.textContent=m;
+  document.body.appendChild(t);setTimeout(()=>t.remove(),2400);
+}
+function registrar(){
+  const imp=parseFloat($('imp').value);
+  if(isNaN(imp)||imp<0)return toast('Escribe el importe cobrado',true);
+  if(!S.user)return toast('Inicia sesión nuevamente',true);
+  const b=siguienteBoleta();
+  guardar({id:'m-'+b,kind:'mov',turno:turnoActual,boleta:b,ts:new Date().toISOString(),fecha:hoy(),usuario:S.user.nombre,
+    tipo:CONFIG.TIPOS[S.tipo],cantidad:S.n,importe:imp,pago:CONFIG.PAGOS[S.pago],procedencia:CONFIG.PROCEDENCIAS[S.proc],obs:$('obs').value.trim(),anulado:false});
+  audit('Registro',`${b} · ${S.n} pers. · ${money(imp)} · ${CONFIG.PAGOS[S.pago]}`);
+  $('imp').value='';$('obs').value='';S.n=1;$('cant').textContent=1;
+  toast('Registrado '+b);pintar();
+}
+function anular(id){
+  const m=S.items.find(x=>x.id===id);if(!m||m.anulado)return;
+  const motivo=prompt('Motivo de la anulación de '+m.boleta+':');
+  if(!motivo||!motivo.trim())return toast('La anulación necesita un motivo',true);
+  m.anulado=true;m.motivo=motivo.trim();m.anulado_por=S.user.nombre;guardar(m);
+  audit('Anulación',`${m.boleta} · ${money(m.importe)} · Motivo: ${m.motivo}`);pintar();
+}
+function totales(){
+  const v=validos(),t={total:0,personas:0,pago:{},tipo:{}};
+  CONFIG.PAGOS.forEach(p=>t.pago[p]=0);
+  v.forEach(m=>{
+    t.total+=Number(m.importe)||0;t.personas+=Number(m.cantidad)||0;
+    t.pago[m.pago]=(t.pago[m.pago]||0)+(Number(m.importe)||0);
+    t.tipo[m.tipo]=(t.tipo[m.tipo]||0)+(Number(m.importe)||0);
+  });
+  t.ops=v.length;return t;
+}
+function pintar(){
+  if(!S.user)return;
+  const t=totales();
+  $('sub').textContent=`${S.user.nombre} · ${new Date().toLocaleDateString('es-PE',{weekday:'long',day:'numeric',month:'long'})}`;
+  $('bol').textContent=siguienteBoleta();
+  $('t-total').textContent=money(t.total);
+  $('t-info').textContent=`${t.personas} personas · ${t.ops} operaciones`;
+  $('t-pay').innerHTML=CONFIG.PAGOS.map(p=>`<div class="mini"><b>${money(t.pago[p]||0)}</b><span>${esc(p)}</span></div>`).join('');
+
+  const m=movs().slice().reverse();
+  $('lista').innerHTML=m.length?m.map(x=>`<div class="mov ${x.anulado?'void':''}">
+    <div class="n">${x.boleta.split('-')[1].slice(-3)}</div>
+    <div><b>${x.cantidad} × ${esc(x.tipo)} <span class="tag">${esc(x.procedencia)}</span><span class="tag">${esc(x.pago)}</span>${x.anulado?'<span class="tag v">Anulado</span>':''}</b>
+      <small>${esc(x.boleta)} · ${hora(x.ts)} · ${esc(x.usuario)}${x.obs?' · '+esc(x.obs):''}${x.anulado?' · Motivo: '+esc(x.motivo):''}</small>
+      ${!x.anulado&&S.user.rol==='admin'?`<br><button class="x" onclick="anular('${x.id}')">Anular</button>`:''}</div>
+    <div class="amt">${money(x.importe)}</div></div>`).join(''):'<div class="empty">Aún no hay entradas registradas en este turno.</div>';
+
+  $('cierre').innerHTML=
+    CONFIG.PAGOS.map(p=>`<div class="k"><span>Total ${esc(p.toLowerCase())}</span><b>${money(t.pago[p]||0)}</b></div>`).join('')+
+    Object.keys(t.tipo).map(k=>`<div class="k"><span style="color:var(--mut)">${esc(k)}</span><span>${money(t.tipo[k])}</span></div>`).join('')+
+    `<div class="k" style="font-size:20px"><span>Total de caja</span><b style="color:var(--gold)">${money(t.total)}</b></div>
+     <div class="k"><span>Personas / operaciones</span><span>${t.personas} / ${t.ops}</span></div>
+     <div class="k"><span>Anuladas</span><span>${movs().length-t.ops}</span></div>`;
+
+  const c=S.items.filter(x=>x.kind==='cierre').sort((a,b)=>a.ts<b.ts?1:-1).slice(0,20);
+  $('cierres').innerHTML=c.length?c.map(x=>`<div class="aud"><b>${money(x.total)}</b> · ${esc(x.fecha)} ${hora(x.ts)}<br><small>${esc(x.usuario)} · ${x.ops||0} operaciones · Efectivo ${money(x.pago?.Efectivo||0)} · Yape ${money(x.pago?.Yape||0)} · Tarjeta ${money(x.pago?.Tarjeta||0)}</small></div>`).join(''):'<div class="empty">Sin cierres guardados.</div>';
+
+  const a=S.items.filter(x=>x.kind==='audit').sort((p,q)=>p.ts<q.ts?1:-1).slice(0,80);
+  $('audit').innerHTML=a.length?a.map(x=>`<div class="aud"><b>${esc(x.accion)}</b> ${esc(x.detalle)}<br><small>${esc(x.usuario)} · ${new Date(x.ts).toLocaleString('es-PE')}</small></div>`).join(''):'<div class="empty">Sin movimientos de auditoría.</div>';
+
+  const yaCerrado=S.items.some(x=>x.kind==='cierre'&&x.turno===turnoActual);
+  const btn=$('btnCerrar');
+  if(btn){btn.disabled=yaCerrado||t.ops===0;btn.textContent=yaCerrado?'Turno ya cerrado':(t.ops===0?'Sin operaciones para cerrar':'Cerrar turno y guardar')}
+}
+
+/* Cierre: bloquea doble toque y registra un solo cierre por turno */
+function cerrar(){
+  if(cerrando)return;
+  const t=totales();
+  if(!t.ops)return toast('No hay operaciones para cerrar',true);
+
+  const cierreExistente=S.items.find(x=>x.kind==='cierre'&&x.turno===turnoActual);
+  if(cierreExistente){
+    toast('Este turno ya fue cerrado. La caja nueva está activa.',true);
+    return;
+  }
+  if(!confirm(`¿Cerrar turno con ${money(t.total)}?`))return;
+
+  cerrando=true;
+  const boton=$('btnCerrar');
+  if(boton){boton.disabled=true;boton.textContent='Guardando cierre…'}
+
+  const turnoCerrado=turnoActual;
+  const cierre={
+    id:'c-'+turnoCerrado,
+    kind:'cierre',
+    turno:turnoCerrado,
+    ts:new Date().toISOString(),
+    fecha:hoy(),
+    usuario:S.user.nombre,
+    total:t.total,
+    personas:t.personas,
+    ops:t.ops,
+    pago:{...t.pago}
+  };
+
+  // Guardar primero el cierre y luego crear el identificador del turno nuevo.
+  guardar(cierre);
+  audit('Cierre de caja',`${money(t.total)} · ${t.ops} operaciones`);
+
+  turnoActual='turno-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
+  localStorage.setItem(SHIFT_KEY,turnoActual);
+
+  pintar();
+  toast('Turno cerrado y guardado. Nueva caja: S/ 0.00');
+  cerrando=false;
+}
+function csv(){
+  const h=['Boleta','Fecha','Hora','Usuario','Tipo','Cantidad','Importe','Pago','Procedencia','Observacion','Estado','Motivo anulacion'];
+  const f=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const rows=movs().map(m=>[m.boleta,m.fecha,hora(m.ts),m.usuario,m.tipo,m.cantidad,Number(m.importe).toFixed(2),m.pago,m.procedencia,m.obs,m.anulado?'ANULADO':'OK',m.motivo||''].map(f).join(','));
+  const blob=new Blob(['\ufeff'+[h.map(f).join(','),...rows].join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const nombre=`caja-puerta-${hoy()}.csv`;
+  const file=new File([blob],nombre,{type:'text/csv'});
+  const respaldo=()=>{
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nombre;a.click();
+    if(navigator.clipboard)blob.text().then(t=>navigator.clipboard.writeText(t)).then(()=>toast('Reporte copiado. Pégalo en Excel o Sheets')).catch(()=>{});
+  };
+  if(navigator.canShare&&navigator.canShare({files:[file]}))navigator.share({files:[file],title:nombre}).catch(e=>{if(e.name!=='AbortError')respaldo()});else respaldo();
+  audit('Exportación','CSV '+hoy());
+}
+document.querySelector('nav').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('sel',x===b));
+  ['reg','mov','cierre','aud'].forEach(v=>$('v-'+v).classList.toggle('hide',v!==b.dataset.v));
+  window.scrollTo(0,0);
+};
+function iniciar(){
+  seg('g-tipo',CONFIG.TIPOS,'tipo');seg('g-pago',CONFIG.PAGOS,'pago');seg('g-proc',CONFIG.PROCEDENCIAS,'proc');
+  pintar();bajar().then(pintar);
+}
+cargarLocal();
+window.addEventListener('online',()=>bajar().then(pintar));
+setInterval(()=>{if(S.user)bajar().then(pintar)},20000);
+let su=null;try{su=sessionStorage.getItem('harem_u')}catch(e){}
+if(su!==null&&CONFIG.USUARIOS[su]){
+  S.user=CONFIG.USUARIOS[su];$('login').classList.add('hide');$('app').classList.remove('hide');iniciar();
+}
+</script>
+</body>
+</html>
